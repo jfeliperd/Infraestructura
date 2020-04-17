@@ -1,13 +1,45 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
-version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+jobs:
+  ProductionEnvironment:
+    docker:
+      - image: circleci/openjdk
+    steps:
+      - add_ssh_keys:
+         fingerprints:
+           - "82:d3:09:f6:29:a4:39:91:c8:61:4b:17:fa:f8:e9:02"
+      - checkout
+      - run:
+         name: "Ejecucion" 
+         command: |
+           echo "A first hello"
+           ls --all
+           pwd 
+           echo "Finished new"              
+           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@18.205.194.47:/var/www/html/index.html
+  DevelopmentEnvironment:
+    docker:
+      - image: circleci/openjdk
+    steps:
+      - add_ssh_keys:
+         fingerprints:
+           - "82:d3:09:f6:29:a4:39:91:c8:61:4b:17:fa:f8:e9:02"
+      - checkout
+      - run:
+         name: "Ejecucion" 
+         command: |
+           echo "A first hello "
+           ls --all
+           pwd 
+           echo "Finished new x2"              
+           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@54.162.8.102:/var/www/html/index.html
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  version: 2
+  build: 
     jobs:
-      - welcome/run
+      - DevelopmentEnvironment
+      - request-testing:
+          type: approval
+          requires:
+            - DevelopmentEnvironment
+      - ProductionEnvironment:
+          requires:
+            - request-testing
