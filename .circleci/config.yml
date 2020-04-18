@@ -21,11 +21,7 @@ jobs:
       - checkout
       - run:
          name: "Ejecucion" 
-         command: |
-           echo "A first hello "
-           ls --all
-           pwd 
-           echo "Finished new x2"              
+         command: |          
            scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@52.87.244.81:/var/www/html/index.html
 workflows:
   version: 2
