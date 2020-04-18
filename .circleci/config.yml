@@ -14,7 +14,7 @@ jobs:
            ls --all
            pwd 
            echo "Finished new"              
-           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@18.205.194.47:/var/www/html/index.html
+           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@3.87.1.16:/var/www/html/index.html
   DevelopmentEnvironment:
     docker:
       - image: circleci/openjdk
@@ -30,7 +30,7 @@ jobs:
            ls --all
            pwd 
            echo "Finished new x2"              
-           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@54.162.8.102:/var/www/html/index.html
+           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@52.87.244.81:/var/www/html/index.html
 workflows:
   version: 2
   build: 
