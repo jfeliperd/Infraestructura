@@ -1,7 +1,7 @@
 jobs:
   TestCluster:
     docker: 
-      -image: aws-eks/python3
+      - image: aws-eks/python3
     steps:
       - add_ssh_keys:
          fingerprints:
