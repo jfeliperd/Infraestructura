@@ -1,4 +1,19 @@
 jobs:
+  test-cluster:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          Cluster_Desarrollo
+        type: string
+    steps:
+      - kubernetes/install
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: Cluster_Desarrollo
+      - run:
+          command: |
+            kubectl get services
+          name: Test cluster
   ProductionEnvironment:
     docker:
       - image: circleci/openjdk
