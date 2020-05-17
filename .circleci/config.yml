@@ -1,6 +1,6 @@
 jobs:
   test-cluster:
-    executor: aws-eks/python3
+    docker: aws-eks/python3
     parameters:
       cluster-name:
         description: |
