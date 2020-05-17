@@ -1,5 +1,5 @@
 jobs:
-  test-cluster:
+  TestCluster:
     docker: aws-eks/python3
     steps:
       - kubernetes/install
