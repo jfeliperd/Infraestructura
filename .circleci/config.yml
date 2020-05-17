@@ -1,11 +1,6 @@
 jobs:
   test-cluster:
     docker: aws-eks/python3
-    parameters:
-      cluster-name:
-        description: |
-          Cluster_Desarrollo
-        type: string
     steps:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
