@@ -6,7 +6,7 @@ jobs:
       - add_ssh_keys:
          fingerprints:
            - "82:d3:09:f6:29:a4:39:91:c8:61:4b:17:fa:f8:e9:02"
-      - kubernetes/install
+      - install-kubectl: true
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: Cluster_Desarrollo
       - run:
