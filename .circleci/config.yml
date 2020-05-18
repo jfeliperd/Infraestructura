@@ -1,50 +1,34 @@
-jobs:
-  TestCluster:
-    docker: 
-      - image: aws-eks/python3
-    steps:
-      - add_ssh_keys:
-         fingerprints:
-           - "82:d3:09:f6:29:a4:39:91:c8:61:4b:17:fa:f8:e9:02"
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: Cluster_Desarrollo
-      - run:
-          command: |
-            kubectl get services
-  ProductionEnvironment:
-    docker:
-      - image: circleci/openjdk
-    steps:
-      - add_ssh_keys:
-         fingerprints:
-           - "82:d3:09:f6:29:a4:39:91:c8:61:4b:17:fa:f8:e9:02"
-      - checkout
-      - run:
-         name: "Ejecucion" 
-         command: |           
-           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@3.87.1.16:/var/www/html/index.html
-  DevelopmentEnvironment:
-    docker:
-      - image: circleci/openjdk
-    steps:
-      - add_ssh_keys:
-         fingerprints:
-           - "82:d3:09:f6:29:a4:39:91:c8:61:4b:17:fa:f8:e9:02"
-      - checkout
-      - run:
-         name: "Ejecucion" 
-         command: |          
-           scp -o StrictHostKeyChecking=no .circleci/index.html ubuntu@52.87.244.81:/var/www/html/index.html
-workflows:
-  version: 2
-  build: 
-    jobs:
-      - TestCluster
-      - DevelopmentEnvironment
-      - request-testing:
-          type: approval
-          requires:
-            - DevelopmentEnvironment
-      - ProductionEnvironment:
-          requires:
-            - request-testing
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: deploymentuno
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: front-end
+          image: nginx
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          volumeMounts:
+            - name: nginx-front-end
+              mountPath: /etc/nginx/conf.d
+        - name: app1
+          image: httpd:2.4
+          ports:
+            - containerPort: 3000
+      volume:
+        - name: nginx-front-end
+          configMap:
+            name: nginx-configuration
+            items:
+              - key: nginx-default.conf
+                path: default.conf
